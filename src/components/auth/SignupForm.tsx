@@ -39,6 +39,7 @@ export function SignupForm() {
       await signUp(email, password);
       router.push("/dashboard");
     } catch (err) {
+      console.error(err);
       setError(err instanceof Error ? err.message : "Failed to create account");
     } finally {
       setLoading(false);
@@ -96,7 +97,7 @@ export function SignupForm() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full mt-4" disabled={loading}>
             {loading ? "Creating account..." : "Create Account"}
           </Button>
           <p className="text-sm text-muted-foreground">

@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
+import { AlertTriangle, Plus } from "lucide-react";
 
 interface CreateIssueDialogProps {
   onIssueCreated: (issue: Issue) => void;
@@ -105,19 +106,7 @@ export function CreateIssueDialog({ onIssueCreated }: CreateIssueDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
+          <Plus size={16} />
           New Issue
         </Button>
       </DialogTrigger>
@@ -131,22 +120,7 @@ export function CreateIssueDialog({ onIssueCreated }: CreateIssueDialogProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {showSimilarWarning && similarIssues.length > 0 && (
             <Alert className="border-amber-500 bg-amber-50 dark:bg-amber-950/20">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-amber-600"
-              >
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
-                <path d="M12 9v4" />
-                <path d="M12 17h.01" />
-              </svg>
+              <AlertTriangle size={16} className="text-amber-600" />
               <AlertTitle className="text-amber-800 dark:text-amber-200">Similar Issues Found</AlertTitle>
               <AlertDescription className="text-amber-700 dark:text-amber-300">
                 <p className="mb-2">The following issues might be related:</p>

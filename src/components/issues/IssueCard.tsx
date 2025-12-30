@@ -29,6 +29,13 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
+import {
+  AlertTriangle,
+  Calendar,
+  EllipsisVertical,
+  Trash,
+  User,
+} from "lucide-react";
 
 interface IssueCardProps {
   issue: Issue;
@@ -38,13 +45,15 @@ interface IssueCardProps {
 
 const priorityColors: Record<Priority, string> = {
   low: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-  medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+  medium:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
   high: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
 };
 
 const statusColors: Record<Status, string> = {
   open: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-  in_progress: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+  in_progress:
+    "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
   done: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
 };
 
@@ -54,7 +63,11 @@ const statusLabels: Record<Status, string> = {
   done: "Done",
 };
 
-export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardProps) {
+export function IssueCard({
+  issue,
+  onIssueUpdated,
+  onIssueDeleted,
+}: IssueCardProps) {
   const [updating, setUpdating] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [statusWarning, setStatusWarning] = useState<string | null>(null);
@@ -76,7 +89,9 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
       onIssueUpdated({ ...issue, status: newStatus });
       toast.success(`Status updated to ${statusLabels[newStatus]}`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update status");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update status"
+      );
     } finally {
       setUpdating(false);
     }
@@ -90,7 +105,9 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
       onIssueUpdated({ ...issue, priority: newPriority });
       toast.success(`Priority updated to ${newPriority}`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update priority");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update priority"
+      );
     } finally {
       setUpdating(false);
     }
@@ -103,7 +120,9 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
       toast.success("Issue deleted successfully");
       setDeleteDialogOpen(false);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete issue");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete issue"
+      );
     }
   };
 
@@ -128,21 +147,7 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="shrink-0">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="12" cy="5" r="1" />
-                    <circle cx="12" cy="19" r="1" />
-                  </svg>
+                  <EllipsisVertical size={16} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -150,22 +155,7 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
                   onClick={() => setDeleteDialogOpen(true)}
                   className="text-destructive"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mr-2"
-                  >
-                    <path d="M3 6h18" />
-                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                  </svg>
+                  <Trash size={16} className="mr-2" />
                   Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -175,21 +165,7 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
         <CardContent className="space-y-4">
           {statusWarning && (
             <Alert variant="destructive" className="py-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" x2="12" y1="8" y2="12" />
-                <line x1="12" x2="12.01" y1="16" y2="16" />
-              </svg>
+              <AlertTriangle size={16} className="mr-2" />
               <AlertDescription>{statusWarning}</AlertDescription>
             </Alert>
           )}
@@ -202,7 +178,7 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
                 onValueChange={(value: Status) => handleStatusChange(value)}
                 disabled={updating}
               >
-                <SelectTrigger className="h-7 w-[120px]">
+                <SelectTrigger className="h-7">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -220,7 +196,7 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
                 onValueChange={(value: Priority) => handlePriorityChange(value)}
                 disabled={updating}
               >
-                <SelectTrigger className="h-7 w-[100px]">
+                <SelectTrigger className="h-7">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -231,7 +207,10 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
               </Select>
             </div>
 
-            <Badge variant="secondary" className={priorityColors[issue.priority]}>
+            <Badge
+              variant="secondary"
+              className={priorityColors[issue.priority]}
+            >
               {issue.priority}
             </Badge>
             <Badge variant="secondary" className={statusColors[issue.status]}>
@@ -242,60 +221,21 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground pt-2 border-t">
             {issue.assignedTo && (
               <div className="flex items-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span className="truncate max-w-[150px]">{issue.assignedTo}</span>
+                <User size={16} className="mr-2" />
+                <span className="truncate max-w-[150px]">
+                  {issue.assignedTo}
+                </span>
               </div>
             )}
             <div className="flex items-center gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-                <line x1="16" x2="16" y1="2" y2="6" />
-                <line x1="8" x2="8" y1="2" y2="6" />
-                <line x1="3" x2="21" y1="10" y2="10" />
-              </svg>
+              <Calendar size={16} className="mr-2" />
               <span>{formatDate(issue.createdAt)}</span>
             </div>
             <div className="flex items-center gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-              <span className="truncate max-w-[150px]">by {issue.createdByEmail}</span>
+              <User size={16} className="mr-2" />
+              <span className="truncate max-w-[150px]">
+                by {issue.createdByEmail}
+              </span>
             </div>
           </div>
         </CardContent>
@@ -306,11 +246,15 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
           <DialogHeader>
             <DialogTitle>Delete Issue</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this issue? This action cannot be undone.
+              Are you sure you want to delete this issue? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
@@ -322,4 +266,3 @@ export function IssueCard({ issue, onIssueUpdated, onIssueDeleted }: IssueCardPr
     </>
   );
 }
-
