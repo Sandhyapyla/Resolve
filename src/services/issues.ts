@@ -15,6 +15,12 @@ import { Issue, IssueFormData, Status, Priority } from "@/types";
 
 const ISSUES_COLLECTION = "issues";
 
+// Helper to ensure db is configured
+const getDb = () => {
+  if (!db) throw new Error("Firebase not configured");
+  return db;
+};
+
 // Convert Firestore document to Issue
 const docToIssue = (doc: { id: string; data: () => Record<string, unknown> }): Issue => {
   const data = doc.data();
@@ -37,6 +43,7 @@ export const createIssue = async (
   userId: string,
   userEmail: string
 ): Promise<Issue> => {
+  const database = getDb();
   const issueToCreate = {
     ...issueData,
     createdAt: Timestamp.now(),
@@ -44,7 +51,7 @@ export const createIssue = async (
     createdByEmail: userEmail,
   };
 
-  const docRef = await addDoc(collection(db, ISSUES_COLLECTION), issueToCreate);
+  const docRef = await addDoc(collection(database, ISSUES_COLLECTION), issueToCreate);
   
   return {
     id: docRef.id,
@@ -57,8 +64,9 @@ export const createIssue = async (
 
 // Get all issues (newest first)
 export const getIssues = async (): Promise<Issue[]> => {
+  const database = getDb();
   const q = query(
-    collection(db, ISSUES_COLLECTION),
+    collection(database, ISSUES_COLLECTION),
     orderBy("createdAt", "desc")
   );
   
@@ -71,24 +79,25 @@ export const getFilteredIssues = async (
   statusFilter?: Status,
   priorityFilter?: Priority
 ): Promise<Issue[]> => {
-  let q = query(collection(db, ISSUES_COLLECTION), orderBy("createdAt", "desc"));
+  const database = getDb();
+  let q = query(collection(database, ISSUES_COLLECTION), orderBy("createdAt", "desc"));
 
   if (statusFilter && priorityFilter) {
     q = query(
-      collection(db, ISSUES_COLLECTION),
+      collection(database, ISSUES_COLLECTION),
       where("status", "==", statusFilter),
       where("priority", "==", priorityFilter),
       orderBy("createdAt", "desc")
     );
   } else if (statusFilter) {
     q = query(
-      collection(db, ISSUES_COLLECTION),
+      collection(database, ISSUES_COLLECTION),
       where("status", "==", statusFilter),
       orderBy("createdAt", "desc")
     );
   } else if (priorityFilter) {
     q = query(
-      collection(db, ISSUES_COLLECTION),
+      collection(database, ISSUES_COLLECTION),
       where("priority", "==", priorityFilter),
       orderBy("createdAt", "desc")
     );
@@ -103,13 +112,15 @@ export const updateIssue = async (
   issueId: string,
   updates: Partial<IssueFormData>
 ): Promise<void> => {
-  const issueRef = doc(db, ISSUES_COLLECTION, issueId);
+  const database = getDb();
+  const issueRef = doc(database, ISSUES_COLLECTION, issueId);
   await updateDoc(issueRef, updates);
 };
 
 // Delete an issue
 export const deleteIssue = async (issueId: string): Promise<void> => {
-  const issueRef = doc(db, ISSUES_COLLECTION, issueId);
+  const database = getDb();
+  const issueRef = doc(database, ISSUES_COLLECTION, issueId);
   await deleteDoc(issueRef);
 };
 
